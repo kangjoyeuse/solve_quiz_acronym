@@ -4,48 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
-    {
-        public function tampilRegistrasi(){
-            return view('register');
+{
+    // Tampilkan halaman registrasi
+    public function tampilRegistrasi(){
+        return view('register');
+    }
+
+    // Proses registrasi user baru
+    public function submitRegistrasi(Request $request){
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255|unique:users,name',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|min:8|confirmed', // Menambah konfirmasi password
+        ]);
+
+        // Simpan user baru
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password), // Gunakan Hash::make() agar lebih jelas
+        ]);
+
+        return redirect()->route('login.tampil')->with('success', 'Registrasi berhasil! Silakan login.');
+    }
+
+    // Tampilkan halaman login
+    public function tampilLogin(){
+        return view('login');
+    }
+
+    // Proses login
+    public function submitLogin(Request $request){
+        // Validasi input sebelum autentikasi
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        // Membatasi percobaan login agar tidak bisa brute force
+        if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->route('home');
         }
 
-        public function submitRegistrasi(Request $request){
-            // Run validation first
-            $request->validate([
-                'name' => 'required|string|max:255|unique:users,name',
-                'email' => 'required|email|max:255|unique:users,email',
-                'password' => 'required|min:6|',
-            ]);
+        // Jika gagal, batasi percobaan login
+        throw ValidationException::withMessages([
+            'email' => __('Email atau password salah!'),
+        ]);
+    }
 
-            // Simpan user baru
-            User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password), // Enkripsi password
-            ]);
+    // Logout user
+    public function submitLogout(Request $request){
+        Auth::logout();
 
-            return redirect()->route('login.tampil')->with('success', 'Registrasi berhasil! Silakan login.');
-        }
+        // Hapus semua session
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        public function tampilLogin(){
-            return view('login');
-        }
-
-        public function submitLogin(Request $request){
-            $data = $request->only('email', 'password');
-            if (FacadesAuth::attempt($data)){
-                $request->session()->regenerate();
-                return redirect()->route('home');
-            } else {
-                return redirect()->back()->with('error', 'Login gagal, silahkan coba lagi');
-            }
-        }
-
-        public function submitLogout(){
-            FacadesAuth::logout();
-            return redirect()->route('login.tampil');
-        }
-    };
+        return redirect()->route('login.tampil');
+    }
+}
