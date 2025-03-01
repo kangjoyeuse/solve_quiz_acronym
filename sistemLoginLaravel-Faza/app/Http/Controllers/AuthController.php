@@ -20,7 +20,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:users,name',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|min:8|confirmed', // Menambah konfirmasi password
+            'password' => 'required|min:8'
         ]);
 
         // Simpan user baru
