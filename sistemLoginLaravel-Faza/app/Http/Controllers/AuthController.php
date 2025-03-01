@@ -52,10 +52,8 @@ class AuthController extends Controller
             return redirect()->route('home');
         }
 
-        // Jika gagal, batasi percobaan login
-        throw ValidationException::withMessages([
-            'email' => __('Email atau password salah!'),
-        ]);
+        // Simpan pesan error di session
+        return back()->with('error', 'Email atau password salah!');
     }
 
     // Logout user
