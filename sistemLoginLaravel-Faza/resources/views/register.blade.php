@@ -26,7 +26,12 @@
 
                     <div class="mt-4">
                       <label class="block font-medium text-sm text-gray-700 mb-1" for="password"> Password </label>
-                      <input class="px-3 py-2 border border-gray-300 focus:border-indigo-500 focus:outline-indigo-500 rounded-md shadow-sm block w-full" id="password" type="password" name="password" required="required" autocomplete="current-password" />
+                      <input class="px-3 py-2 border border-gray-300 focus:border-indigo-500 focus:outline-indigo-500 rounded-md shadow-sm block w-full" id="password" type="password" name="password" required="required"  />
+                    </div>
+
+                    <div class="mt-4">
+                      <label class="block font-medium text-sm text-gray-700 mb-1" for="password_confirm"> Password </label>
+                      <input class="px-3 py-2 border border-gray-300 focus:border-indigo-500 focus:outline-indigo-500 rounded-md shadow-sm block w-full" id="password_confirm" type="password" name="password_confirm" required="required" />
                     </div>
 
                     <div class="mt-4">
