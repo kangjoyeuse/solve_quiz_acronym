@@ -1,0 +1,3 @@
+[submodule "imsakiyah-api-go"]
+	path = imsakiyah-api-go
+	url = https://github.com/muharromi42/imsakiyah-api-go.git
