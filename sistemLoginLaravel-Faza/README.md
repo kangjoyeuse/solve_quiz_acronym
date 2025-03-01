@@ -33,7 +33,15 @@ If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Lar
 
 Install packages
 ```bash
+cd sistemLoginLaravel-Faza
+composer install
 npm install
+# for Linux
+# cp .env.example .env
+copy .env.example .env
+php artisan key:generate
+php artisan migrate
+
 composer run dev
 ```
 
