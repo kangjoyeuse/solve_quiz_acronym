@@ -4,3 +4,6 @@
 [submodule "ramadhan-tracker"]
 	path = ramadhan-tracker
 	url = https://github.com/ifalfahri/ramadhan-tracker
+[submodule "ramadhan-imsakiyah"]
+	path = ramadhan-imsakiyah
+	url = https://github.com/elrizwiraswara/ramadhan_imsakiyah
