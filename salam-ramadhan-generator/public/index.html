@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generator Ucapan Ramadhan</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #2e7d32;
@@ -77,6 +78,13 @@
       margin-bottom: 20px;
     }
 
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-weight: 500;
+    }
+
     input {
       width: 100%;
       padding: 12px 15px;
@@ -105,6 +113,10 @@
       font-weight: 500;
       font-family: inherit;
       width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     .button:hover {
@@ -129,23 +141,23 @@
       margin-top: 30px;
     }
 
-    textarea {
+    .message-preview {
       width: 100%;
-      height: 150px;
-      padding: 15px;
+      min-height: 150px;
+      padding: 20px;
       border: 1px solid #ddd;
       border-radius: var(--border-radius);
-      font-size: 16px;
-      resize: none;
       margin-bottom: 15px;
       font-family: inherit;
-      transition: var(--transition);
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
     }
 
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+    .character-count {
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-bottom: 10px;
     }
 
     .copy-status {
@@ -162,9 +174,89 @@
       opacity: 1;
     }
 
-    .buttons {
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .loading.visible {
+      display: block;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .tabs {
       display: flex;
-      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: var(--transition);
+      color: var(--text-light);
+    }
+
+    .tab.active {
+      border-bottom-color: var(--primary);
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .history-container {
+      margin-top: 30px;
+    }
+
+    .history-item {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .history-item:hover {
+      border-color: var(--primary);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .history-item p {
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-item .history-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 5px;
     }
 
     @media (max-width: 480px) {
@@ -179,10 +271,6 @@
       h1 {
         font-size: 1.5rem;
       }
-      
-      .buttons {
-        flex-direction: column;
-      }
     }
   </style>
 </head>
@@ -193,63 +281,114 @@
         <h1>Generator Ucapan Ramadhan</h1>
       </header>
       
-      <main>
-        <div class="form-group">
-          <input 
-            type="text" 
-            id="name-input" 
-            placeholder="Masukkan nama Anda..." 
-            aria-label="Nama Anda"
-          />
-        </div>
-        
-        <button class="button" id="generate-btn">Buat Ucapan</button>
-        
-        <div class="result-area">
-          <textarea 
-            id="result-textbox" 
-            readonly 
-            placeholder="Ucapan akan muncul di sini..."
-            aria-label="Hasil ucapan"
-          ></textarea>
-          
-          <div class="buttons">
-            <button class="button secondary" id="copy-btn">Salin ke Clipboard</button>
+      <div class="tabs">
+        <div class="tab active" data-tab="generator">Generator</div>
+        <div class="tab" data-tab="history">Riwayat</div>
+      </div>
+      
+      <div class="tab-content active" id="generator-tab">
+        <main>
+          <div class="form-group">
+            <label for="name-input">Nama</label>
+            <input 
+              type="text" 
+              id="name-input" 
+              placeholder="Masukkan nama Anda..." 
+              aria-label="Nama Anda"
+            />
           </div>
           
-          <div class="copy-status" id="copy-status"></div>
+          <button class="button" id="generate-btn">
+            <i class="fas fa-magic"></i> Buat Ucapan
+          </button>
+          
+          <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Sedang membuat ucapan...</p>
+          </div>
+          
+          <div class="result-area">
+            <div class="message-preview" id="message-preview"></div>
+            <div class="character-count" id="character-count">0 karakter</div>
+            
+            <button class="button secondary" id="copy-btn">
+              <i class="fas fa-copy"></i> Salin Teks
+            </button>
+            
+            <div class="copy-status" id="copy-status"></div>
+          </div>
+        </main>
+      </div>
+      
+      <div class="tab-content" id="history-tab">
+        <h2>Riwayat Ucapan</h2>
+        <p>Ucapan yang telah Anda buat akan muncul di sini.</p>
+        <div class="history-container" id="history-container">
         </div>
-      </main>
+      </div>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const nameInput = document.getElementById('name-input');
-      const generateBtn = document.getElementById('generate-btn');
-      const resultTextbox = document.getElementById('result-textbox');
-      const copyBtn = document.getElementById('copy-btn');
-      const copyStatus = document.getElementById('copy-status');
+      const elements = {
+        nameInput: document.getElementById('name-input'),
+        generateBtn: document.getElementById('generate-btn'),
+        messagePreview: document.getElementById('message-preview'),
+        characterCount: document.getElementById('character-count'),
+        copyBtn: document.getElementById('copy-btn'),
+        copyStatus: document.getElementById('copy-status'),
+        loadingEl: document.getElementById('loading'),
+        historyContainer: document.getElementById('history-container')
+      };
+
+      for (const [key, element] of Object.entries(elements)) {
+        if (!element) {
+          console.error(`Element with id '${key}' not found`);
+          return; 
+        }
+      }
+
+      let messageHistory = JSON.parse(localStorage.getItem('ramadhanMessages') || '[]');
       
-      generateBtn.addEventListener('click', generateMessage);
+      updateHistoryDisplay();
       
-      nameInput.addEventListener('keypress', (e) => {
+      elements.generateBtn.addEventListener('click', generateMessage);
+      elements.nameInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           generateMessage();
         }
       });
+      elements.copyBtn.addEventListener('click', copyToClipboard);
       
-      copyBtn.addEventListener('click', copyToClipboard);
+      const tabs = document.querySelectorAll('.tab');
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabId = tab.getAttribute('data-tab');
+          
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          tabContents.forEach(content => {
+            content.classList.remove('active');
+            if (content.id === `${tabId}-tab`) {
+              content.classList.add('active');
+            }
+          });
+        });
+      });
       
       async function generateMessage() {
-        const name = nameInput.value.trim();
+        const name = elements.nameInput.value.trim();
         if (!name) {
           alert("Silakan masukkan nama terlebih dahulu!");
-          nameInput.focus();
+          elements.nameInput.focus();
           return;
         }
 
-        resultTextbox.value = "Menghasilkan ucapan...";
+        elements.loadingEl.classList.add('visible');
+        elements.messagePreview.textContent = "";
         
         const apiUrl = `/generate-message?name=${encodeURIComponent(name)}`;
         
@@ -257,27 +396,88 @@
           const response = await fetch(apiUrl);
           const data = await response.json();
 
+          elements.loadingEl.classList.remove('visible');
+
           if (response.ok) {
-            resultTextbox.value = data.result.replace(/{nama user}/g, name);
+            const message = data.result.replace(/{nama user}/g, name);
             
-            copyStatus.innerText = '';
-            copyStatus.classList.remove('visible');
+            elements.messagePreview.textContent = message;
+            elements.characterCount.textContent = `${message.length} karakter`;
+            elements.copyStatus.innerText = '';
+            elements.copyStatus.classList.remove('visible');
+            
+            saveToHistory(name, message);
           } else {
-            resultTextbox.value = data.error || "Terjadi kesalahan.";
+            throw new Error(data.error || "Terjadi kesalahan saat menghasilkan pesan.");
           }
         } catch (error) {
           console.error(error);
-          resultTextbox.value = "Terjadi kesalahan jaringan. Silakan coba lagi.";
+          elements.loadingEl.classList.remove('visible');
+          elements.messagePreview.textContent = error.message || "Terjadi kesalahan jaringan. Silakan coba lagi.";
         }
+      }
+      
+      function saveToHistory(name, message) {
+        const timestamp = new Date().toISOString();
+        const historyItem = {
+          name,
+          message,
+          timestamp
+        };
+        
+        messageHistory.unshift(historyItem);
+        
+        if (messageHistory.length > 10) {
+          messageHistory.pop();
+        }
+        
+        localStorage.setItem('ramadhanMessages', JSON.stringify(messageHistory));
+        
+        updateHistoryDisplay();
+      }
+      
+      function updateHistoryDisplay() {
+        elements.historyContainer.innerHTML = '';
+        
+        if (messageHistory.length === 0) {
+          elements.historyContainer.innerHTML = '<p>Belum ada ucapan yang disimpan.</p>';
+          return;
+        }
+        
+        messageHistory.forEach((item, index) => {
+          const date = new Date(item.timestamp);
+          const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+          
+          const historyItem = document.createElement('div');
+          historyItem.className = 'history-item';
+          historyItem.innerHTML = `
+            <p>${item.message.substring(0, 100)}${item.message.length > 100 ? '...' : ''}</p>
+            <div class="history-meta">
+              <span>Untuk: ${item.name}</span>
+              <span>${formattedDate}</span>
+            </div>
+          `;
+          
+          historyItem.addEventListener('click', () => {
+            elements.nameInput.value = item.name;
+            elements.messagePreview.textContent = item.message;
+            elements.characterCount.textContent = `${item.message.length} karakter`;
+            
+            tabs[0].click();
+          });
+          
+          elements.historyContainer.appendChild(historyItem);
+        });
       }
 
       function copyToClipboard() {
-        if (!resultTextbox.value) {
+        const message = elements.messagePreview.textContent;
+        if (!message) {
           return;
         }
         
         if (navigator.clipboard && window.isSecureContext) {
-          navigator.clipboard.writeText(resultTextbox.value)
+          navigator.clipboard.writeText(message)
             .then(() => showCopySuccess())
             .catch(err => {
               console.error('Failed to copy: ', err);
@@ -289,28 +489,34 @@
       }
       
       function fallbackCopyToClipboard() {
-        resultTextbox.select();
-        resultTextbox.setSelectionRange(0, 99999); 
+        const textarea = document.createElement('textarea');
+        textarea.value = elements.messagePreview.textContent;
+        textarea.style.position = 'fixed';  
+        document.body.appendChild(textarea);
+        textarea.select();
         
         try {
           document.execCommand('copy');
           showCopySuccess();
         } catch (err) {
           console.error('Failed to copy: ', err);
-          copyStatus.innerText = 'Gagal menyalin teks!';
-          copyStatus.classList.add('visible');
+          elements.copyStatus.innerText = 'Gagal menyalin teks!';
+          elements.copyStatus.classList.add('visible');
         }
+        
+        document.body.removeChild(textarea);
       }
       
       function showCopySuccess() {
-        copyStatus.innerText = 'Teks berhasil disalin ke clipboard!';
-        copyStatus.classList.add('visible');
+        elements.copyStatus.innerText = 'Teks berhasil disalin ke clipboard!';
+        elements.copyStatus.classList.add('visible');
         
         setTimeout(() => {
-          copyStatus.classList.remove('visible');
+          elements.copyStatus.classList.remove('visible');
         }, 3000);
       }
     });
   </script>
 </body>
 </html>
+
