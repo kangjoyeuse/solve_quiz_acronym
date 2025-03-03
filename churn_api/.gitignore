@@ -1,0 +1,50 @@
+# ⛔ Virtual Environment
+venv/
+.env/
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.pdb
+
+# ⛔ Cache & Log Files
+*.log
+*.sqlite3
+db.sqlite3
+
+# ⛔ Jupyter Notebook Output
+.ipynb_checkpoints/
+
+# ⛔ Dependency & Config
+Pipfile
+Pipfile.lock
+poetry.lock
+requirements.txt
+
+# ⛔ VS Code & PyCharm Settings
+.vscode/
+.idea/
+
+# ⛔ Model & Data (Opsional)
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+*.csv
+*.json
+*.xlsx
+
+# ⛔ Docker & Build Files
+Dockerfile
+*.dockerignore
+__pycache__/
+dist/
+build/
+*.egg-info/
+
+# ⛔ API Keys & Credentials
+*.pem
+*.key
+.env
+secrets.json
+config.yaml
