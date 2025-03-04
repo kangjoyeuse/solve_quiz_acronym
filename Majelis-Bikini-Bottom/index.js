@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         document.getElementById("handwrittenText").style.display = "none";
         const video = document.getElementById("video");
+        console.log(video);
         video.style.display = "block";
         video.load();
         video.play();
