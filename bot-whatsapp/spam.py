@@ -1,22 +1,32 @@
-import pyautogui
 import time
-import random
+# import time: Mengimpor modul time yang menyediakan berbagai fungsi terkait waktu,
+# seperti sleep yang digunakan di dalam skrip.
+import keyboard
+# import keyboard: Mengimpor modul keyboard yang digunakan untuk memantau dan mengontrol kegiatan tombol pada keyboard.
+import pyautogui
+# import pyautogui: Mengimpor modul pyautogui yang menyediakan fungsi untuk mengendalikan pergerakan kursor dan tindakan pada layar.
 
-# Spam message
-message = "Hello, I am a bot. I am spamming this message."
 
-# Delay between each message
-delay = 0.5
+message = "Balik jamber?"
+# message = "Balik jamber?": 
+# Mendefinisikan variabel message dengan nilai string "Balik jamber?". Variabel ini akan digunakan sebagai pesan yang akan dikirimkan.
+n = 50
+# n = 100: 
+# Mendefinisikan variabel n dengan nilai 100. Variabel ini akan digunakan sebagai jumlah pengulangan pesan yang akan dikirimkan.
 
-# Number of messages to spam
-num_messages = 100
+keyboard.wait('ctrl')
+# keyboard.wait('ctrl'): 
+# Program akan menunggu sampai tombol 'Ctrl' (Control) ditekan. Setelah tombol 'Ctrl' ditekan, program akan melanjutkan eksekusi ke baris berikutnya.
+time.sleep(1)
+# time.sleep(1): 
+# Program akan berhenti selama 1 detik. Ini memberi waktu untuk mempersiapkan tempat di mana Anda ingin mengirim pesan.
 
-# Start spamming
-for i in range(num_messages):
-    pyautogui.typewrite(message)
-    pyautogui.press('enter')
-    time.sleep(delay)
-    print(f"Message {i + 1} sent.")
-    time.sleep(random.uniform(0.5, 1.5))  # Random delay between 0.5 and 1.5 seconds
 
-print("Spamming complete.")
+# for i in range(n): 
+# Ini adalah loop for yang akan berulang sebanyak n kali (nilai yang ditetapkan sebelumnya).
+for i in range(n):
+    pyautogui.typewrite(message + '\n')
+    # pyautogui.typewrite(message + '\n'): Ini akan mengetikkan pesan yang telah ditetapkan (nilai dari variabel message) dan menambahkan karakter newline (\n) atau enter setelahnya. 
+    # Sehingga setiap pesan akan dikirimkan dengan mengetikkan teks di dalam variabel message diikuti dengan karakter newline, yang ekuivalen dengan menekan tombol Enter.
+
+    
