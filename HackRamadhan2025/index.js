@@ -37,6 +37,6 @@ async function generateCheatCode() {
   await sleep(3000);
   loading.success("Kode Cheat: Tidur");
 }
-//await welcome();
+await welcome();
 await cheatMenu();
 await generateCheatCode();
