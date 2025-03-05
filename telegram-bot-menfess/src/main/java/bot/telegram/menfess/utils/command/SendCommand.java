@@ -8,40 +8,37 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 public class SendCommand {
 
-    public SendMessage helpSendMenfess(Update update) {
+    private SendMessage createMessage(String text, long chatId) {
         return SendMessage.builder()
-                .chatId(update.getMessage().getChatId())
-                .text(TextUtils.help)
+                .chatId(chatId)
+                .text(text)
                 .parseMode("HTML")
                 .build();
     }
 
+    public SendMessage helpSendMenfess(Update update) {
+        return createMessage(TextUtils.help, update.getMessage().getChatId());
+    }
+
     public SendMessage help(Update update) {
-        return SendMessage.builder()
-                .chatId(update.getMessage().getChatId())
-                .text(TextUtils.helpSendMenfess)
-                .parseMode("HTML")
-                .build();
+        return createMessage(TextUtils.helpSendMenfess, update.getMessage().getChatId());
     }
+
     public SendMessage message(String message, long channel) {
-        return SendMessage.builder()
-                .chatId(channel)
-                .text(message)
-                .parseMode("HTML")
-                .build();
+        return createMessage(message, channel);
     }
+
     public SendMessage errorUsersFreeNotContainsUsername(String message, long chatId) {
-        return SendMessage.builder()
-                .chatId(chatId)
-                .text(message)
-                .parseMode("HTML")
-                .build();
+        return createMessage(message, chatId);
     }
+
     public SendMessage errorUsersNotHaveLimit(String message, long chatId) {
-        return SendMessage.builder()
-                .chatId(chatId)
-                .text(message)
-                .parseMode("HTML")
-                .build();
+        return createMessage(message, chatId);
+    }
+    public SendMessage successSendingMessage(String message, long chatId) {
+        return createMessage(message, chatId);
+    }
+    public SendMessage helpDeleteMessage(String message, long chatId) {
+        return createMessage(message, chatId);
     }
 }
