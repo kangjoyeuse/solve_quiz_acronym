@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Bolong Puasa</title>
+    <link rel="stylesheet" href="./src/out.css">
+</head>
+<body class="bg-neutral-900">
+    <div class="w-full flex  ">
+        <div class="w-[80%] min-w-[700px] h-[300px] mx-auto ">
+            <div class="w-full flex relative flex-col">
+                <h1 class="text-white text-3xl pt-8 font-bold">Daftar Bolong Puasa</h1>
+                <p class="text-neutral-300 text-sm py-2">Lengkapi Puasamu dengan meminimalisir bolong puasa, pastikan membayarnya</p>
+                <button class="px-4 py-2 cursor-pointer hover:bg-pink-400 rounded bottom-5 right-0 bg-pink-500 absolute text-white">Tambah List</button>
+            </div>
+            <div class="w-full h-max bg-neutral-800 my-10 rounded-2xl overflow-hidden pb-10">
+                <div class="min-h-20 flex items-center justify-end">
+                    <input class="border-1 border-neutral-300 py-3 px-5 rounded-md mx-5 text-white" placeholder="Search" type="text" name="search" id="search">
+                </div>
+                <div class="min-h-20 flex bg-neutral-700">
+                    <div class="w-20 justify-center h-20 flex items-center">
+                        <input id="select" class="w-full  h-[30%] " type="checkbox" name="" id="">
+                    </div>
+                    <div class="flex-1 flex items-center">
+                        <p class="text-white font-bold">Alasan</p>
+                    </div>
+
+                    <div class="w-40 flex items-center">
+                        <p class="cursor-pointer  text-white font-bold/">Date</p>
+                    </div>
+                    <div class="w-30 flex">
+                        <button class="cursor-pointer text-red-400">Delete</button>
+                    </div>
+                </div>
+
+            <div id="root"></div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="./script.js"></script>
+</body>
+</html>
