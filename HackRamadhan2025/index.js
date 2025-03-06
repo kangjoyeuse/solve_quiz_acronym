@@ -2,6 +2,7 @@ import { confirm, checkbox, Separator } from "@inquirer/prompts";
 import figlet from "figlet";
 import gradient from "gradient-string";
 import ns from "nanospinner";
+import chalk from "chalk";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -16,7 +17,15 @@ async function welcome() {
 async function cheatMenu() {
   await checkbox({
     message: "Pilih cheat yang mau diaktifkan\n",
-    choices: [{ name: "Anti Lapar" }, { name: "Anti Lemes" }],
+    choices: [
+      { name: "Anti Lapar" },
+      { name: "Anti Lemes" },
+      { name: "Anti Nafsu" },
+      { name: "Auto Buka" },
+      { name: "Auto Sahur" },
+      { name: "Auto Khatam" },
+      { name: "Unlimited Pahala" },
+    ],
   });
 
   const RUsure = await confirm({
@@ -35,7 +44,7 @@ async function generateCheatCode() {
   await sleep(7000);
   loading.start("Membuat Kode exploit");
   await sleep(3000);
-  loading.success("Kode Cheat: Tidur");
+  loading.success("Kode Cheat: " + chalk.red.bold("Tidur"));
 }
 await welcome();
 await cheatMenu();
