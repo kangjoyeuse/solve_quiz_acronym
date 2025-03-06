@@ -26,11 +26,11 @@
             </div>
             <div class="w-full h-max bg-neutral-800 my-10 rounded-2xl overflow-hidden pb-10">
                 <div class="min-h-20 flex items-center justify-end">
-                    <input class="border-1 border-neutral-300 py-3 px-5 rounded-md mx-5 text-white" placeholder="Search" type="text" name="search" id="search">
+                    <input onkeyup="Search(this)" class="border-1 border-neutral-300 py-3 px-5 rounded-md mx-5 text-white" placeholder="Search" type="text" name="search" id="search">
                 </div>
                 <div class="min-h-20 flex bg-neutral-700">
                     <div class="w-20 justify-center h-20 flex items-center">
-                        <input id="select" class="w-full  h-[30%] " type="checkbox" name="" id="">
+                        <input id="select_top" onchange="handleCheckbox(this)" class="w-full  h-[30%] " type="checkbox" name="" id="">
                     </div>
                     <div class="flex-1 flex items-center">
                         <p class="text-white font-bold">Alasan</p>
@@ -40,7 +40,7 @@
                         <p class="cursor-pointer  text-white font-bold/">Date</p>
                     </div>
                     <div class="w-30 flex">
-                        <button class="cursor-pointer text-red-400">Delete</button>
+                        <button onclick="onALLDelete()" class="cursor-pointer text-red-400">Delete</button>
                     </div>
                 </div>
 
