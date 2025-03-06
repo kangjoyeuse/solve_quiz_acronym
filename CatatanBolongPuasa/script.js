@@ -3,37 +3,55 @@ database = [
         alasan : "ppppp",
         date : "12/11/20225"
     },
-    {
-        alasan : "lupa sahur",
-        date : "12/11/20225"
-    },
-    {
-        alasan : "ppppp",
-        date : "12/11/20225"
-    }
 ]
+const add = document.getElementById("add")
+
+function showAdd() {
+    add.classList.remove("hidden");
+    add.classList.add("flex")
+}
+
+
+function hideAdd() {
+    add.classList.remove("flex");
+    add.classList.add("hidden")
+}
+
 
 const root = document.getElementById("root")
-let element_html = "";
+function DrawData(){
+    let element_html = "";
+    database.reverse().forEach((element , index) => {
+        element_html += `
+                    <div class="min-h-20 flex  ${(index != database.length - 1) ? "border-b-neutral-700 border-b-2" : ""}">
+                        <div class="w-20 justify-center h-20 flex items-center">
+                            <input id="select" class="w-full  h-[30%] " type="checkbox" name="" id="">
+                        </div>
+                        <div class="flex-1 flex items-center">
+                            <p class="text-gray-400">${element.alasan}</p>
+                        </div>
+    
+                        <div class="w-40 flex items-center">
+                            <p class="cursor-pointer  text-gray-400">${element.date}</p>
+                        </div>
+                        <div class="w-30 flex">
+                            <button class="cursor-pointer text-red-400">Delete</button>
+                        </div>
+                    </div>
+        `
+    });
+    root.innerHTML = element_html
+}
+DrawData()
 
-database.forEach((element , index) => {
-    element_html += `
-                <div class="min-h-20 flex  ${(index != database.length - 1) ? "border-b-neutral-700 border-b-2" : ""}">
-                    <div class="w-20 justify-center h-20 flex items-center">
-                        <input id="select" class="w-full  h-[30%] " type="checkbox" name="" id="">
-                    </div>
-                    <div class="flex-1 flex items-center">
-                        <p class="text-gray-400">${element.alasan}</p>
-                    </div>
-
-                    <div class="w-40 flex items-center">
-                        <p class="cursor-pointer  text-gray-400">${element.date}</p>
-                    </div>
-                    <div class="w-30 flex">
-                        <button class="cursor-pointer text-red-400">Delete</button>
-                    </div>
-                </div>
-    `
-});
-
-root.innerHTML = element_html
+function SubmitEvent(event){
+    const alasan = document.getElementById("input_alasan")
+    const date = document.getElementById("input_date")
+    database.push({
+        alasan : alasan.value,
+        date : date.value
+    })
+    DrawData()
+    hideAdd()
+    event.preventDefault()
+}
