@@ -1,8 +1,7 @@
 <?php
-// Ambil data pahala
+
 $pahala = json_decode(file_get_contents("pahala.json"), true);
 
-// Cek apakah pahala masih tersedia
 $totalPahala = $pahala['total'];
 $sisaPahala = $pahala['remaining'];
 ?>
